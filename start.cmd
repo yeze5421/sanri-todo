@@ -1,0 +1,13 @@
+@echo off
+setlocal
+cd /d "%~dp0"
+where node >nul 2>nul
+if errorlevel 1 (
+  echo Node.js 18 or newer is required. Please install Node.js and try again.
+  pause
+  exit /b 1
+)
+start "" "http://localhost:4173"
+node server.cjs
+pause
+endlocal
