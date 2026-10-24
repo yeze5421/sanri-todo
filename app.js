@@ -360,6 +360,42 @@
   });
   $('undo-button').addEventListener('click', () => { const action = undo; dismissToast(); if (action) action(); });
   $('dismiss-toast').addEventListener('click', dismissToast);
+  $('clear-data-button').addEventListener('click', () => {
+    $('appearance-dialog').close();
+    $('reset-error').hidden = true;
+    $('reset-dialog').showModal();
+    $('cancel-reset').focus();
+  });
+  $('cancel-reset').addEventListener('click', () => $('reset-dialog').close());
+  $('confirm-reset').addEventListener('click', () => {
+    try { localStorage.removeItem(KEY); }
+    catch {
+      $('reset-error').textContent = "Your saved data could not be cleared. Please try again.";
+      $('reset-error').hidden = false;
+      return;
+    }
+    let themeCleared = true;
+    try { window.ThreeDaysAppearance.reset(); } catch { themeCleared = false; }
+    dismissToast();
+    clearTimeout(expirationTimer);
+    pendingExpiry = false;
+    unannouncedExpired = 0;
+    state = E.createState();
+    demoState = E.createState();
+    demoOrigin = E.createState();
+    demo = false;
+    started = false;
+    demoHours = 0;
+    view = 'active';
+    filter = 'all';
+    $('task-input').value = '';
+    $('task-input').setCustomValidity('');
+    $('filter-options').hidden = true;
+    $('reset-dialog').close();
+    render();
+    showToast(themeCleared ? "A fresh start. Your saved data has been cleared." : "Your list is clear. Your theme preference could not be reset.");
+    $('task-input').focus();
+  });
   $('about-button').addEventListener('click', () => $('about-dialog').showModal());
   $('close-about').addEventListener('click', () => $('about-dialog').close());
   $('understood-button').addEventListener('click', () => $('about-dialog').close());
@@ -369,7 +405,7 @@
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) $('about-dialog').close();
   });
   document.addEventListener('keydown', event => {
-    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k' && !$('about-dialog').open) {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k' && !document.querySelector('dialog[open]')) {
       event.preventDefault(); $('task-input').focus();
     }
   });
@@ -385,7 +421,7 @@
     if (!demo) render();
   });
   load();
-  if (started) { finishExpiration(true); render(); }
-  else enterDemo();
+  if (started) finishExpiration(true);
+  render();
   setInterval(tick, 1000);
 })();

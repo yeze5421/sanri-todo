@@ -4,10 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f5ef">
-  <meta name="description" content="A gentler to-do list. Every task lives for three days. Finish it, or let it fade away. Either is okay.">
+  <meta name="description" content="A to-do list that lets go after 3 days. Six calming themes. Fully offline.">
   <title>Three Days — Three days. Then let it go.</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="themes.css">
+  <script src="appearance.js"></script>
   <script src="engine.js" defer></script>
   <script src="copy.js" defer></script>
   <script src="app.js" defer></script>
@@ -30,7 +32,7 @@
     <header class="site-header">
       <a class="brand" href="#" aria-label="Three Days home"><span class="brand-icon"><svg class="icon"><use href="#i-leaf"/></svg></span><span>Three Days</span></a>
       <nav aria-label="Main navigation"><a class="nav-current" href="#list-section">My list</a><button class="nav-link" id="about-button"><span class="nav-label">About Three Days</span> <span aria-hidden="true">↗</span></button></nav>
-      <span class="header-note"><span class="status-dot"></span><span>A little lighter is enough</span></span>
+      <button id="appearance-button" class="appearance-button" aria-haspopup="dialog"><span class="appearance-swatch" aria-hidden="true"></span><span>Appearance</span></button>
     </header>
 
     <main>
@@ -109,6 +111,22 @@
     <footer><span><span>Three Days</span> <span class="footer-dot">·</span> <span>Give tasks a little time. Give yourself a little room.</span></span><span><span>Nothing overdue. Just things that pass.</span><svg class="icon" aria-hidden="true"><use href="#i-leaf"/></svg></span></footer>
   </div>
 
+  <dialog id="appearance-dialog" aria-labelledby="appearance-title">
+    <button class="dialog-close icon-button" id="close-appearance" aria-label="Close appearance"><svg class="icon"><use href="#i-close"/></svg></button>
+    <span class="eyebrow">A PLACE THAT FEELS LIKE YOU</span>
+    <h2 id="appearance-title">Find your kind of calm.</h2>
+    <p class="appearance-intro">Six little worlds. The same gentle rhythm.</p>
+    <div id="theme-options" class="theme-options" role="group" aria-label="Choose a theme"></div>
+    <div class="appearance-bottom"><span id="theme-status" role="status">Saved on this device.</span><button id="clear-data-button" class="clear-data-button">Clear my data</button></div>
+    <button class="primary-button" id="done-appearance">This feels like me</button>
+  </dialog>
+  <dialog id="reset-dialog" aria-labelledby="reset-title" aria-describedby="reset-description">
+    <span class="eyebrow">A FRESH START</span>
+    <h2 id="reset-title">Let your old list go?</h2>
+    <p id="reset-description">This deletes your tasks, completed items, counters, and theme preference on this device. It cannot be undone.</p>
+    <p id="reset-error" role="alert" hidden></p>
+    <div class="reset-actions"><button class="secondary-button" id="cancel-reset" autofocus>Keep my list</button><button class="primary-button" id="confirm-reset">Clear my data</button></div>
+  </dialog>
   <dialog id="about-dialog" aria-labelledby="about-title">
     <button class="dialog-close icon-button" id="close-about" aria-label="Close About Three Days"><svg class="icon"><use href="#i-close"/></svg></button>
     <span class="dialog-leaf"><svg class="icon"><use href="#i-leaf"/></svg></span><span class="eyebrow">A LITTLE ROOM TO BREATHE</span>

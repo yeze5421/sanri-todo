@@ -13,6 +13,10 @@ test('desktop serves the local interface and its scripts with restrictive conten
   const script = await handleAssetRequest({ method: 'GET', url: 'three-days://app/app.js' }, root);
   assert.equal(script.status, 200);
   assert.match(script.headers.get('content-type'), /javascript/);
+  for (const asset of ['themes.css', 'appearance.js']) {
+    const response = await handleAssetRequest({ method: 'GET', url: `three-days://app/${asset}` }, root);
+    assert.equal(response.status, 200);
+  }
   const head = await handleAssetRequest({ method: 'HEAD', url: HOME }, root);
   assert.equal(head.status, 200);
   assert.equal(await head.text(), '');
