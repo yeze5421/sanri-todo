@@ -9,7 +9,7 @@ const files = new Map([
   ['/styles.css', ['styles.css', 'text/css; charset=utf-8']],
   ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
   ['/engine.js', ['engine.js', 'text/javascript; charset=utf-8']],
-  ['/i18n.js', ['i18n.js', 'text/javascript; charset=utf-8']],
+  ['/copy.js', ['copy.js', 'text/javascript; charset=utf-8']],
   ['/favicon.svg', ['favicon.svg', 'image/svg+xml']],
 ]);
 const server = http.createServer((req, res) => {
@@ -37,4 +37,4 @@ server.on('error', (error) => {
     : error.message);
   process.exitCode = 1;
 });
-server.listen(port, '127.0.0.1', () => console.log(`Sanri is ready: http://localhost:${port}`));
+server.listen(port, '127.0.0.1', () => console.log(`Three Days is ready: http://localhost:${port}`));

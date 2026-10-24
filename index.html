@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f5ef">
-  <meta name="description" data-i18n-content="每个待办只活三天。做完很好，没做完，也没关系。一张帮你放下拖延焦虑的清单。" content="每个待办只活三天。做完很好，没做完，也没关系。一张帮你放下拖延焦虑的清单。">
-  <title data-i18n="三日 — 有些事，过三天就算了">三日 — 有些事，过三天就算了</title>
+  <meta name="description" content="A gentler to-do list. Every task lives for three days. Finish it, or let it fade away. Either is okay.">
+  <title>Three Days — Three days. Then let it go.</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="styles.css">
   <script src="engine.js" defer></script>
-  <script src="i18n.js" defer></script>
+  <script src="copy.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -25,21 +25,20 @@
     <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8h12a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h5"/></symbol>
     <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6"/></symbol>
   </svg>
-  <a class="skip-link" href="#task-input" data-i18n="跳到清单">跳到清单</a>
+  <a class="skip-link" href="#task-input">Skip to your list</a>
   <div class="site-shell">
     <header class="site-header">
-      <a class="brand" href="#" aria-label="三日首页" data-i18n-aria-label="三日首页"><span class="brand-icon"><svg class="icon"><use href="#i-leaf"/></svg></span><span><span data-i18n="三日">三日</span><span class="brand-en">sanri</span></span></a>
-      <nav aria-label="主导航" data-i18n-aria-label="主导航"><a class="nav-current" href="#list-section" data-i18n="我的清单">我的清单</a><button class="nav-link" id="about-button"><span data-i18n="关于三日">关于三日</span> <span aria-hidden="true">↗</span></button></nav>
-      <span class="header-note"><span class="status-dot"></span><span data-i18n="轻一点，也很好">轻一点，也很好</span></span>
-      <div class="language-switch" role="group" aria-label="界面语言" data-i18n-aria-label="界面语言"><button type="button" data-language="zh-CN" lang="zh-CN" aria-label="使用中文" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-label="Use English" aria-pressed="false">EN</button></div>
+      <a class="brand" href="#" aria-label="Three Days home"><span class="brand-icon"><svg class="icon"><use href="#i-leaf"/></svg></span><span>Three Days</span></a>
+      <nav aria-label="Main navigation"><a class="nav-current" href="#list-section">My list</a><button class="nav-link" id="about-button"><span class="nav-label">About Three Days</span> <span aria-hidden="true">↗</span></button></nav>
+      <span class="header-note"><span class="status-dot"></span><span>A little lighter is enough</span></span>
     </header>
 
     <main>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
           <div class="eyebrow"><span></span> A LITTLE LESS, A LITTLE LIGHTER</div>
-          <h1 id="hero-title"><span data-i18n="有些事，">有些事，</span><br><span data-i18n="过三天">过三天</span><span class="hero-emphasis" data-i18n="就算了。">就算了。</span></h1>
-          <p><span data-i18n="每个待办只活三天。">每个待办只活三天。</span><br class="mobile-break"><span data-i18n="做完很好，没做完，也没关系。">做完很好，没做完，也没关系。</span></p>
+          <h1 id="hero-title"><span>Three days.</span><br><span>Then </span><span class="hero-emphasis">let it go.</span></h1>
+          <p><span>Every task lives for three days. </span><br class="mobile-break"><span>Done is good. Not done is okay, too.</span></p>
         </div>
         <div class="hero-art" aria-hidden="true">
           <svg class="botanical" viewBox="0 0 420 300" fill="none">
@@ -66,61 +65,61 @@
 
       <div class="workspace">
         <section class="list-section" id="list-section" aria-labelledby="list-title">
-          <div class="section-heading"><h2 id="list-title"><span data-i18n="眼下的小事">眼下的小事</span> <span id="active-count" class="count-badge">0</span></h2><span data-i18n="慢慢来，刚刚好。">慢慢来，刚刚好。</span></div>
+          <div class="section-heading"><h2 id="list-title"><span>Little things, for now</span> <span id="active-count" class="count-badge">0</span></h2><span>Your pace is the right pace.</span></div>
           <div class="list-card">
             <form id="task-form" autocomplete="off">
-              <label class="sr-only" for="task-input" data-i18n="添加一件想做的小事，最多 120 个字">添加一件想做的小事，最多 120 个字</label>
-              <div class="input-row"><svg class="icon input-plus" aria-hidden="true"><use href="#i-plus"/></svg><input id="task-input" type="text" maxlength="120" placeholder="写一件想做的小事…" data-i18n-placeholder="写一件想做的小事…" required><button class="add-button" type="submit"><span data-i18n="放进清单">放进清单</span> <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div>
-              <div class="input-note"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="从现在起，它有 72 小时。无需设置截止日期。">从现在起，它有 72 小时。无需设置截止日期。</span><kbd>Enter ↵</kbd></div>
+              <label class="sr-only" for="task-input">Add a little thing to do, up to 120 characters</label>
+              <div class="input-row"><svg class="icon input-plus" aria-hidden="true"><use href="#i-plus"/></svg><input id="task-input" type="text" maxlength="120" placeholder="Something you’d like to do…" required><button class="add-button" type="submit"><span>Add to list</span> <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div>
+              <div class="input-note"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span>It has 72 hours from now. No deadline to set.</span><kbd>Enter ↵</kbd></div>
             </form>
-            <div class="demo-banner" id="demo-banner" hidden><span><span class="demo-dot"></span><span data-i18n="这是示例清单，先感受一下。">这是示例清单，先感受一下。</span></span><button id="exit-demo">开始我的清单 <span aria-hidden="true">↗</span></button></div>
-            <div class="list-toolbar"><div class="view-tabs" role="group" aria-label="清单视图" data-i18n-aria-label="清单视图"><button data-view="active" class="selected" aria-pressed="true" data-i18n="还在这里">还在这里</button><button data-view="completed" aria-pressed="false"><span data-i18n="已完成">已完成</span> <span id="completed-count">0</span></button></div><button id="filter-button" class="filter-button" title="切换到下一种时间状态" data-i18n-title="切换到下一种时间状态" aria-label="筛选时间状态：全部状态">全部状态 <span aria-hidden="true">⌄</span></button></div>
-            <div class="filter-options" id="filter-options" role="group" aria-label="按时间筛选" data-i18n-aria-label="按时间筛选" hidden><button data-filter="all" aria-pressed="true" data-i18n="全部">全部</button><button data-filter="fresh" aria-pressed="false" data-i18n="刚刚开始">刚刚开始</button><button data-filter="fading" aria-pressed="false" data-i18n="渐渐变淡">渐渐变淡</button><button data-filter="leaving" aria-pressed="false" data-i18n="快要消失">快要消失</button></div>
-            <div id="task-list" class="task-list" aria-label="待办清单" data-i18n-aria-label="待办清单"></div>
-            <div class="list-bottom"><span><span class="tiny-leaf">❧</span> <span data-i18n="完成，是一种轻松。放下，也是。">完成，是一种轻松。放下，也是。</span></span><span id="list-time-note">每件事 · 3 天</span></div>
+            <div class="demo-banner" id="demo-banner" hidden><span><span class="demo-dot"></span><span>A sample list. Give it a try.</span></span><button id="exit-demo">Start my list <span aria-hidden="true">↗</span></button></div>
+            <div class="list-toolbar"><div class="view-tabs" role="group" aria-label="List view"><button data-view="active" class="selected" aria-pressed="true">Still here</button><button data-view="completed" aria-pressed="false"><span>Done</span> <span id="completed-count">0</span></button></div><button id="filter-button" class="filter-button" title="Show time filters" aria-label="Filter by age: All stages">All stages <span aria-hidden="true">⌄</span></button></div>
+            <div class="filter-options" id="filter-options" role="group" aria-label="Filter by age" hidden><button data-filter="all" aria-pressed="true">All</button><button data-filter="fresh" aria-pressed="false">Just beginning</button><button data-filter="fading" aria-pressed="false">Fading gently</button><button data-filter="leaving" aria-pressed="false">Almost gone</button></div>
+            <div id="task-list" class="task-list" aria-label="To-do list"></div>
+            <div class="list-bottom"><span><span class="tiny-leaf">❧</span> <span>Finishing feels lighter. So does letting go.</span></span><span id="list-time-note">Each task · 3 days</span></div>
           </div>
-          <div class="below-list"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span id="storage-status">只保存在你的浏览器里。你的心事，只属于你。</span></div>
+          <div class="below-list"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><span id="storage-status">Saved only in this browser. Your thoughts stay yours.</span></div>
         </section>
 
-        <aside class="sidebar" aria-label="三日的节奏" data-i18n-aria-label="三日的节奏">
+        <aside class="sidebar" aria-label="The rhythm of Three Days">
           <section class="rhythm-card">
-            <div class="side-title"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg><h2 data-i18n="一件小事的三天">一件小事的三天</h2></div>
+            <div class="side-title"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg><h2>Three days of a little thing</h2></div>
             <div class="timeline">
-              <div class="timeline-step"><span class="timeline-dot day-one"></span><div><h3><span data-i18n="第一天">第一天</span> <span class="day-description" data-i18n="清晰">清晰</span></h3><p data-i18n="刚刚想起，就放在这里。">刚刚想起，就放在这里。</p></div></div>
-              <div class="timeline-step"><span class="timeline-dot day-two"></span><div><h3><span data-i18n="第二天">第二天</span> <span class="day-description" data-i18n="渐淡">渐淡</span></h3><p data-i18n="没关系，生活有自己的节奏。">没关系，生活有自己的节奏。</p></div></div>
-              <div class="timeline-step"><span class="timeline-dot day-three"></span><div><h3><span data-i18n="第三天">第三天</span> <span class="day-description" data-i18n="随风">随风</span></h3><p data-i18n="慢慢变淡，然后轻轻离开。">慢慢变淡，然后轻轻离开。</p></div></div>
+              <div class="timeline-step"><span class="timeline-dot day-one"></span><div><h3><span>Day one</span> <span class="day-description">Fresh</span></h3><p>A new thought. A little space for it.</p></div></div>
+              <div class="timeline-step"><span class="timeline-dot day-two"></span><div><h3><span>Day two</span> <span class="day-description">Fading</span></h3><p>It’s okay. Life has its own rhythm.</p></div></div>
+              <div class="timeline-step"><span class="timeline-dot day-three"></span><div><h3><span>Day three</span> <span class="day-description">Drifting</span></h3><p>Slowly fading, then gently drifting away.</p></div></div>
             </div>
-            <div class="farewell"><span>“</span><p data-i18n="这件事其实没那么重要">这件事其实没那么重要</p><small data-i18n="它离开时，会这样告诉你。">它离开时，会这样告诉你。</small></div>
+            <div class="farewell"><span>“</span><p>Maybe it wasn’t that important.</p><small>A little reminder as it leaves.</small></div>
           </section>
           <section class="time-card">
-            <div class="time-title"><svg class="icon" aria-hidden="true"><use href="#i-wind"/></svg><h2 data-i18n="让时间走一会儿">让时间走一会儿</h2><span class="mini-tag" data-i18n="体验">体验</span></div>
-            <p id="demo-description">不用等三天，看看待办怎样轻轻消失。</p>
-            <button class="demo-start" id="enter-demo"><span data-i18n="体验 72 小时">体验 72 小时</span> <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <div class="time-title"><svg class="icon" aria-hidden="true"><use href="#i-wind"/></svg><h2>Let time wander</h2><span class="mini-tag">Try it</span></div>
+            <p id="demo-description">No need to wait three days. See a task fade away.</p>
+            <button class="demo-start" id="enter-demo"><span>Try 72 hours</span> <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
             <div id="demo-controls" hidden>
-              <div class="slider-heading"><label for="time-slider" data-i18n="时间向前">时间向前</label><output id="time-output" for="time-slider">0 小时</output><button id="reset-demo" class="icon-button" aria-label="重置时间演示" data-i18n-aria-label="重置时间演示"><svg class="icon"><use href="#i-reset"/></svg></button></div>
-              <input id="time-slider" type="range" min="0" max="72" value="0" step="1" aria-label="演示时间向前推进的小时数" data-i18n-aria-label="演示时间向前推进的小时数">
-              <div class="slider-labels"><span data-i18n="现在">现在</span><span>24h</span><span>48h</span><span>72h</span></div>
-              <div class="demo-caption" data-i18n="仅影响示例，不会改变你的清单。">仅影响示例，不会改变你的清单。</div>
+              <div class="slider-heading"><label for="time-slider">Time ahead</label><output id="time-output" for="time-slider">0h</output><button id="reset-demo" class="icon-button" aria-label="Reset the time demo"><svg class="icon"><use href="#i-reset"/></svg></button></div>
+              <input id="time-slider" type="range" min="0" max="72" value="0" step="1" aria-label="Hours to move forward in the demo">
+              <div class="slider-labels"><span>Now</span><span>24h</span><span>48h</span><span>72h</span></div>
+              <div class="demo-caption">Only the sample changes. Your list stays yours.</div>
             </div>
           </section>
-          <div class="small-stats"><div><span id="stat-completed">0</span><p data-i18n="件事，认真做完">件事，认真做完</p></div><span class="stats-divider"></span><div><span id="stat-released">0</span><p data-i18n="件事，轻轻放下">件事，轻轻放下</p></div></div>
+          <div class="small-stats"><div><span id="stat-completed">0</span><p>things thoughtfully done</p></div><span class="stats-divider"></span><div><span id="stat-released">0</span><p>things gently let go</p></div></div>
         </aside>
       </div>
     </main>
-    <footer><span><span data-i18n="三日">三日</span> <span class="footer-dot">·</span> <span data-i18n="给待办一个保质期，给自己一点余地。">给待办一个保质期，给自己一点余地。</span></span><span><span data-i18n="这里没有逾期，只有过去。">这里没有逾期，只有过去。</span><svg class="icon" aria-hidden="true"><use href="#i-leaf"/></svg></span></footer>
+    <footer><span><span>Three Days</span> <span class="footer-dot">·</span> <span>Give tasks a little time. Give yourself a little room.</span></span><span><span>Nothing overdue. Just things that pass.</span><svg class="icon" aria-hidden="true"><use href="#i-leaf"/></svg></span></footer>
   </div>
 
   <dialog id="about-dialog" aria-labelledby="about-title">
-    <button class="dialog-close icon-button" id="close-about" aria-label="关闭关于三日" data-i18n-aria-label="关闭关于三日"><svg class="icon"><use href="#i-close"/></svg></button>
+    <button class="dialog-close icon-button" id="close-about" aria-label="Close About Three Days"><svg class="icon"><use href="#i-close"/></svg></button>
     <span class="dialog-leaf"><svg class="icon"><use href="#i-leaf"/></svg></span><span class="eyebrow">A LITTLE ROOM TO BREATHE</span>
-    <h2 id="about-title" data-i18n="清单应该让你轻松一点。">清单应该让你轻松一点。</h2>
-    <p><span data-i18n="三日是一张会过期的待办清单。每件事从创建那一刻起，只停留">三日是一张会过期的待办清单。每件事从创建那一刻起，只停留</span> <strong data-i18n="72 小时">72 小时</strong><span data-i18n="：第一天清晰，第二天渐淡，第三天随风离开。">：第一天清晰，第二天渐淡，第三天随风离开。</span></p>
-    <p data-i18n="过期后，未完成的事项会从清单中消失，只留下一句「这件事其实没那么重要」。已经完成的事项，会留在「已完成」里。">过期后，未完成的事项会从清单中消失，只留下一句「这件事其实没那么重要」。已经完成的事项，会留在「已完成」里。</p>
-    <div class="about-note"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><p data-i18n="无需账号，数据只保存在当前浏览器。关闭网页后，时间仍会流逝；再次打开时会整理过期事项。清除浏览器数据也会清空清单。">无需账号，数据只保存在当前浏览器。关闭网页后，时间仍会流逝；再次打开时会整理过期事项。清除浏览器数据也会清空清单。</p></div>
-    <p class="about-last"><span data-i18n="没有连续打卡，没有落后提醒。">没有连续打卡，没有落后提醒。</span><br><span data-i18n="今天做一点，或者，放过自己。">今天做一点，或者，放过自己。</span></p>
-    <button class="primary-button" id="understood-button" data-i18n="好，轻一点。">好，轻一点。</button>
+    <h2 id="about-title">A list should help you breathe.</h2>
+    <p><span>Three Days is a to-do list with an expiry date. Every task gets just </span> <strong>72 hours</strong><span> from the moment you add it: fresh on day one, fading on day two, and drifting away on day three.</span></p>
+    <p>After 72 hours, unfinished tasks disappear with a gentle thought: “Maybe it wasn’t that important.” Finished tasks stay in Done.</p>
+    <div class="about-note"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><p>No account needed. Your list stays in this browser. Time keeps moving while the page is closed, and expired tasks are cleared when you return. Clearing browser data also clears your list.</p></div>
+    <p class="about-last"><span>No streaks. No falling-behind reminders.</span><br><span>Do a little today. Or give yourself a break.</span></p>
+    <button class="primary-button" id="understood-button">A little lighter, then.</button>
   </dialog>
-  <div class="toast" id="toast" role="status" aria-live="polite" hidden><svg class="icon" aria-hidden="true"><use id="toast-icon" href="#i-leaf"/></svg><span id="toast-text"></span><button id="undo-button" data-i18n="撤销" hidden>撤销</button><button id="dismiss-toast" class="icon-button" aria-label="关闭提示" data-i18n-aria-label="关闭提示"><svg class="icon"><use href="#i-close"/></svg></button></div>
-  <noscript><div class="noscript" data-i18n="请启用 JavaScript，让这张清单随着时间慢慢变轻。">请启用 JavaScript，让这张清单随着时间慢慢变轻。</div></noscript>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden><svg class="icon" aria-hidden="true"><use id="toast-icon" href="#i-leaf"/></svg><span id="toast-text"></span><button id="undo-button" hidden>Undo</button><button id="dismiss-toast" class="icon-button" aria-label="Dismiss notification"><svg class="icon"><use href="#i-close"/></svg></button></div>
+  <noscript><div class="noscript">Please enable JavaScript to let your list get lighter with time.</div></noscript>
 </body>
 </html>

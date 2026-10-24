@@ -1,29 +1,36 @@
-# 三日 · 会过期的待办清单
+# Three Days
 
-每个待办只能活 3 天。时间越久，字迹越淡；72 小时后，它会消失，留下一句：**这件事其实没那么重要。**
+A gentler to-do list. Every task lives for three days, fades with time, and disappears after 72 hours with a simple thought: **Maybe it wasn't that important.**
 
-## 启动
+## Run locally
 
-需要 Node.js 18 或更新版本，无需安装任何依赖。
+Requires Node.js 18 or newer. No dependencies to install.
 
-- Windows：双击 `start.cmd`。
-- 命令行：在此目录运行 `npm start`，然后打开 <http://localhost:4173>。
-- 停止服务：在运行服务的终端按 `Ctrl+C`。
+- On Windows, double-click `start.cmd`.
+- From this folder, run `npm start` and open <http://localhost:4173>.
+- To stop the server, press `Ctrl+C` in its terminal.
 
-## 使用
+## Use your list
 
-- 点击右上角的「中文 / EN」可即时切换完整界面语言；浏览器会记住选择。切换不翻译你写下的事项，也不会重置清单、演示进度或原来的 72 小时期限。
-- 首次打开会进入独立演示，可预览待办如何逐渐变淡、最后消失。演示不会改变真实清单。
-- 点击“开始我的清单”，或第一次添加待办，即可开始记录自己的事情。
-- 每件事从创建时起固定保留 **72 小时**；关闭页面后时间仍会继续，下次打开会清理过期待办。
-- 已完成的事项保留在完成记录中；自然过期的事项不会保留标题，只累计放下数量。
-- 数据仅保存在当前浏览器的 `localStorage` 中，不上传、不跨设备同步。清理浏览器站点数据会清空清单。
+- The entire interface is in English, including sample tasks, dates, notifications, and accessibility labels.
+- Your first visit opens a separate sample list. Move the time slider to see tasks fade and disappear without changing your personal list.
+- Select **Start my list**, or add your first task, to begin your own list.
+- Every task gets exactly **72 hours** from creation. Time keeps moving while the page is closed; expired tasks are cleared when you return.
+- Completed tasks remain in **Done**. Expired tasks leave only a count, without retaining their titles.
+- Completing a task or letting it go offers a brief undo. Undo keeps the original deadline.
+- Press `Ctrl+K` on Windows or `Cmd+K` on macOS to focus the task input.
 
-## 检查
+## Local storage
+
+Your list is stored only in this browser's `localStorage`. It is not uploaded or synced across devices. Clearing this site's browser data clears your list.
+
+Existing lists keep their text and original deadlines after the rename to Three Days. The app retains its original storage key for compatibility; old language preferences no longer affect the English interface.
+
+## Checks
 
 ```sh
 npm test
 npm run check
 ```
 
-测试覆盖 72 小时边界、离线过期、完成保留、撤销期限、存储校验和状态不可变性。
+Tests cover the 72-hour boundary, offline expiration, completed records, undo deadlines, storage validation, immutable state transitions, and safe text interpolation.

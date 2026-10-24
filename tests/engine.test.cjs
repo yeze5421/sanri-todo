@@ -17,7 +17,7 @@ function deepFreeze(value) {
 }
 
 test('an item lives for exactly 72 hours, with clear day boundaries', () => {
-  const task = E.createTask('散个步', NOW, 'walk');
+  const task = E.createTask("Take a walk", NOW, 'walk');
   assert.equal(E.getTaskLife(task, NOW).stage, 'fresh');
   assert.equal(E.getTaskLife(task, NOW + E.HOUR * 24 - 1).stage, 'fresh');
   assert.equal(E.getTaskLife(task, NOW + E.HOUR * 24).stage, 'fading');
@@ -32,8 +32,8 @@ test('an item lives for exactly 72 hours, with clear day boundaries', () => {
 
 test('reopening after days offline removes expired text and counts it only once', () => {
   const state = withTasks([
-    E.createTask('早已过期的事', NOW - E.TTL * 3, 'old'),
-    E.createTask('仍然新鲜的事', NOW - E.HOUR, 'new')
+    E.createTask("A long-expired task", NOW - E.TTL * 3, 'old'),
+    E.createTask("A fresh task", NOW - E.HOUR, 'new')
   ]);
   const saved = JSON.parse(JSON.stringify(state));
   const loaded = E.normalizeState(saved, NOW);
@@ -43,11 +43,11 @@ test('reopening after days offline removes expired text and counts it only once'
   assert.equal(second.expiredCount, 0);
   assert.equal(second.state.stats.released, 1);
   assert.deepEqual(second.state.tasks.map(task => task.id), ['new']);
-  assert.equal(JSON.stringify(second.state).includes('早已过期'), false);
+  assert.equal(JSON.stringify(second.state).includes("long-expired"), false);
 });
 
 test('completed tasks remain after their original deadline and cannot complete twice', () => {
-  const initial = withTasks([E.createTask('读一本书', NOW, 'book')]);
+  const initial = withTasks([E.createTask("Read a book", NOW, 'book')]);
   const completed = E.completeTask(initial, 'book', NOW + E.HOUR);
   assert.equal(completed.tasks[0].completedAt, NOW + E.HOUR);
   assert.equal(completed.stats.completed, 1);
@@ -59,7 +59,7 @@ test('completed tasks remain after their original deadline and cannot complete t
 });
 
 test('expiration cannot be defeated by completion or undo at the boundary', () => {
-  const task = E.createTask('旧的待办', NOW, 'old');
+  const task = E.createTask("An old task", NOW, 'old');
   const state = withTasks([task]);
   assert.equal(E.completeTask(state, 'old', NOW + E.TTL), state);
   const completed = E.completeTask(state, 'old', NOW + E.HOUR);
@@ -69,7 +69,7 @@ test('expiration cannot be defeated by completion or undo at the boundary', () =
 });
 
 test('undo restores the original deadline and adjusts counters', () => {
-  const task = E.createTask('小事', NOW, 'small');
+  const task = E.createTask("A little thing", NOW, 'small');
   const initial = withTasks([task]);
   const completed = E.completeTask(initial, 'small', NOW + 10);
   const undone = E.undoCompletion(completed, 'small', NOW + 20);
@@ -88,15 +88,15 @@ test('invalid, duplicate, oversized and malformed persisted records are rejected
   for (const raw of [null, false, '', 12, {}, { version: 9, tasks: [] }, { version: 1, tasks: {} }]) {
     assert.deepEqual(E.normalizeState(raw, NOW), E.createState());
   }
-  const task = E.createTask('  有效待办  ', NOW, 'valid');
+  const task = E.createTask("  A valid task  ", NOW, 'valid');
   const normalized = E.normalizeState({ version: 1, tasks: [
-    task, { ...task, text: '重复 ID' }, null, {}, { ...task, id: 'blank', text: ' ' },
+    task, { ...task, text: "Duplicate ID" }, null, {}, { ...task, id: 'blank', text: ' ' },
     { ...task, id: 'long', text: 'x'.repeat(121) }, { ...task, id: 'time', createdAt: 'yesterday' },
     { ...task, id: 'negative', createdAt: -1 }, { ...task, id: 'bad-done', completedAt: NOW - 1 },
     { ...task, id: 'done', completedAt: NOW }
   ], stats: { released: -12, completed: NaN } }, NOW);
   assert.equal(normalized.tasks.length, 2);
-  assert.equal(normalized.tasks[0].text, '有效待办');
+  assert.equal(normalized.tasks[0].text, "A valid task");
   assert.equal(normalized.stats.released, 0);
   assert.equal(normalized.stats.completed, 1);
 });
@@ -112,8 +112,8 @@ test('task creation rejects empty input, excessive length and invalid timestamps
 });
 
 test('all transitions preserve frozen input state', () => {
-  const initial = deepFreeze(withTasks([E.createTask('原始任务', NOW, 'original')]));
-  const added = E.addTask(initial, '新任务', NOW + 1);
+  const initial = deepFreeze(withTasks([E.createTask("Original task", NOW, 'original')]));
+  const added = E.addTask(initial, "New task", NOW + 1);
   const completed = E.completeTask(initial, 'original', NOW + 1);
   const released = E.releaseTask(initial, 'original', NOW + 1);
   const expired = E.sweepExpired(initial, NOW + E.TTL);
@@ -129,7 +129,7 @@ test('all transitions preserve frozen input state', () => {
 });
 
 test('opacity fades continuously and stays bounded when clocks move', () => {
-  const task = E.createTask('光', NOW, 'light');
+  const task = E.createTask("Light", NOW, 'light');
   let previous = 1;
   for (let hour = 0; hour <= 100; hour++) {
     const life = E.getTaskLife(task, NOW + hour * E.HOUR);
@@ -146,8 +146,8 @@ test('opacity fades continuously and stays bounded when clocks move', () => {
 
 test('future persisted timestamps are bounded to now without reviving expired records', () => {
   const state = withTasks([
-    E.createTask('未来', NOW + E.HOUR, 'future'),
-    E.createTask('过去', NOW - E.TTL, 'past')
+    E.createTask("Future", NOW + E.HOUR, 'future'),
+    E.createTask("Past", NOW - E.TTL, 'past')
   ]);
   const normalized = E.normalizeState(state, NOW);
   assert.equal(normalized.tasks[0].createdAt, NOW);

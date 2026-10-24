@@ -2,7 +2,7 @@
   'use strict';
   const engine = factory();
   if (typeof module === 'object' && module.exports) module.exports = engine;
-  else root.SanriEngine = engine;
+  else root.ThreeDaysEngine = engine;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
@@ -12,7 +12,7 @@
 
   function timestamp(value) {
     const result = value === undefined ? Date.now() : value;
-    if (!Number.isFinite(result) || result < 0) throw new RangeError('时间必须是有效的时间戳');
+    if (!Number.isFinite(result) || result < 0) throw new RangeError("The time is invalid. Please try again.");
     return result;
   }
 
@@ -70,17 +70,17 @@
 
   function createTask(text, now, optionalId) {
     now = timestamp(now);
-    if (typeof text !== 'string') throw new TypeError('写下一件小事吧');
+    if (typeof text !== 'string') throw new TypeError("Write a little thing to do.");
     text = text.trim();
-    if (!text) throw new RangeError('写下一件小事吧');
-    if (text.length > MAX_TEXT_LENGTH) throw new RangeError('每件小事最多写 120 个字符');
+    if (!text) throw new RangeError("Write a little thing to do.");
+    if (text.length > MAX_TEXT_LENGTH) throw new RangeError("Use no more than 120 characters for each task.");
     let id = optionalId;
     if (id === undefined) {
       id = typeof globalThis.crypto !== 'undefined' && typeof globalThis.crypto.randomUUID === 'function'
         ? globalThis.crypto.randomUUID()
         : 'task-' + now.toString(36) + '-' + Math.random().toString(36).slice(2);
     }
-    if (!validId(id)) throw new RangeError('待办标识无效');
+    if (!validId(id)) throw new RangeError("This task could not be added. Please try again.");
     return { id, text, createdAt: now, completedAt: null };
   }
 

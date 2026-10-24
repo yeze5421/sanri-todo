@@ -1,11 +1,11 @@
 (function () {
   'use strict';
-  const E = window.SanriEngine;
-  const I = window.SanriI18n;
-  const t = I.t;
+  const E = window.ThreeDaysEngine;
+  const formatText = window.ThreeDaysCopy.formatText;
+  // Keep the original storage key so existing lists and deadlines remain available.
   const KEY = 'sanri.app.v1';
   const $ = (id) => document.getElementById(id);
-  const stageNames = { fresh: '刚刚开始', fading: '渐渐变淡', leaving: '快要消失' };
+  const stageNames = { fresh: "Just beginning", fading: "Fading gently", leaving: "Almost gone" };
   let state = E.createState();
   let started = false;
   let storageAvailable = true;
@@ -18,7 +18,6 @@
   let filter = 'all';
   let undo = null;
   let toastTimer;
-  let toastMessage = '';
   let expirationTimer;
   let pendingExpiry = false;
   let unannouncedExpired = 0;
@@ -42,9 +41,9 @@
   function currentState() { return demo ? demoState : state; }
   function currentTime() { return demo ? demoAnchor + demoHours * E.HOUR : Date.now(); }
   function storageStatus() {
-    $('storage-status').textContent = t(storageAvailable
-      ? '只保存在你的浏览器里。你的心事，只属于你。'
-      : '浏览器暂时无法保存；本次清单仅在当前页面有效。');
+    $('storage-status').textContent = formatText(storageAvailable
+      ? "Saved only in this browser. Your thoughts stay yours."
+      : "Storage is unavailable. This list will last only for this session.");
   }
   function persist() {
     try {
@@ -85,8 +84,7 @@
   }
   function showToast(message, callback, glyph = 'leaf', duration = 6500) {
     clearTimeout(toastTimer);
-    toastMessage = message;
-    $('toast-text').textContent = t(message);
+    $('toast-text').textContent = formatText(message);
     $('toast-icon').setAttribute('href', `#i-${glyph}`);
     $('undo-button').hidden = !callback;
     $('toast').hidden = false;
@@ -105,7 +103,7 @@
     }
     if (announce && !demo && !document.hidden && unannouncedExpired) {
       unannouncedExpired = 0;
-      showToast('这件事其实没那么重要。轻轻放下了。', null, 'wind', 8000);
+      showToast("Maybe it wasn’t that important. Gently let go.", null, 'wind', 8000);
     }
   }
   function tick() {
@@ -129,9 +127,9 @@
     demoHours = 0;
     demoOrigin = E.createState();
     demoOrigin.tasks = [
-      E.createTask('出门走走，买一束喜欢的花', demoAnchor - 2 * E.HOUR, 'example-flowers'),
-      E.createTask('读几页床头的那本书', demoAnchor - 28 * E.HOUR, 'example-book'),
-      E.createTask('整理一下收藏夹里的灵感', demoAnchor - 52 * E.HOUR, 'example-ideas'),
+      E.createTask("Take a walk and bring home some flowers", demoAnchor - 2 * E.HOUR, 'example-flowers'),
+      E.createTask("Read a few pages of that bedside book", demoAnchor - 28 * E.HOUR, 'example-book'),
+      E.createTask("Sort through those saved ideas", demoAnchor - 52 * E.HOUR, 'example-ideas'),
     ];
     demoState = demoOrigin;
     $('time-slider').value = '0';
@@ -156,21 +154,21 @@
     render();
   }
   function remainingLabel(ms) {
-    if (ms < 60000) return t('即将随风离开');
+    if (ms < 60000) return formatText("Drifting away soon");
     const totalMinutes = Math.ceil(ms / 60000);
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
-    if (!hours) return t('还有 {minutes} 分钟', { minutes });
-    return t('还有 {hours} 小时{minutes}', { hours, minutes: hours < 3 && minutes ? t(' {minutes} 分', { minutes }) : '' });
+    if (!hours) return formatText("{minutes} min left", { minutes });
+    return formatText("{hours}h{minutes} left", { hours, minutes: hours < 3 && minutes ? formatText(" {minutes}m", { minutes }) : '' });
   }
   function ageLabel(age) {
-    if (age < E.HOUR) return t('刚刚放进来');
-    if (age < 24 * E.HOUR) return t('今天放进来');
-    if (age < 48 * E.HOUR) return t('昨天放进来');
-    return t('前天放进来');
+    if (age < E.HOUR) return formatText("Just added");
+    if (age < 24 * E.HOUR) return formatText("Added today");
+    if (age < 48 * E.HOUR) return formatText("Added yesterday");
+    return formatText("Added two days ago");
   }
   function taskRow(task, now) {
-    const text = demo ? t(task.text) : task.text;
+    const text = task.text;
     const done = task.completedAt !== null;
     const life = E.getTaskLife(task, now);
     const row = element('article', `task-row ${done ? 'completed' : life.stage}`);
@@ -179,7 +177,7 @@
     const check = element('button', 'task-check');
     check.type = 'button';
     check.append(icon('check'));
-    check.setAttribute('aria-label', t(done ? '已完成：{task}' : '完成：{task}', { task: text }));
+    check.setAttribute('aria-label', formatText(done ? "Done: {task}" : "Complete: {task}", { task: text }));
     if (done) check.disabled = true;
     else check.addEventListener('click', () => complete(task));
     const main = element('div', 'task-main');
@@ -187,11 +185,11 @@
     const meta = element('div', 'task-meta');
     const tag = element('span', 'stage-tag');
     tag.append(icon(done ? 'check' : life.stage === 'fresh' ? 'sun' : life.stage === 'fading' ? 'leaf' : 'wind'));
-    tag.append(document.createTextNode(t(done ? '认真做完了' : stageNames[life.stage] || '轻轻离开')));
+    tag.append(document.createTextNode(formatText(done ? "Thoughtfully done" : stageNames[life.stage] || "Gently let go")));
     meta.append(tag);
     meta.append(element('span', 'meta-divider'));
-    const completedDate = done ? new Date(task.completedAt).toLocaleDateString(I.getLocale(), { month: 'long', day: 'numeric' }) : '';
-    meta.append(element('span', 'task-age', done ? t('{date}完成', { date: completedDate }) : ageLabel(life.age)));
+    const completedDate = done ? new Date(task.completedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) : '';
+    meta.append(element('span', 'task-age', done ? formatText("Done on {date}", { date: completedDate }) : ageLabel(life.age)));
     if (!done) {
       const dots = element('span', 'life-dots');
       dots.setAttribute('aria-hidden', 'true');
@@ -203,14 +201,14 @@
     const right = element('div', 'task-right');
     const time = element('span', 'task-time');
     time.append(icon(done ? 'check' : 'clock'));
-    time.append(document.createTextNode(done ? t('做得很好') : remainingLabel(life.remaining)));
-    if (!done) time.title = t('将于 {date} 自然消失', { date: new Date(task.createdAt + E.TTL).toLocaleString(I.getLocale()) });
+    time.append(document.createTextNode(done ? formatText("Nicely done") : remainingLabel(life.remaining)));
+    if (!done) time.title = formatText("Fades away on {date}", { date: new Date(task.createdAt + E.TTL).toLocaleString('en-US') });
     right.append(time);
     if (!done) {
       const release = element('button', 'task-release');
       release.type = 'button';
-      release.title = t('现在就放下');
-      release.setAttribute('aria-label', t('放下：{task}', { task: text }));
+      release.title = formatText("Let it go now");
+      release.setAttribute('aria-label', formatText("Let go: {task}", { task: text }));
       release.append(icon('close'));
       release.addEventListener('click', () => letGo(task));
       right.append(release);
@@ -223,22 +221,22 @@
     const mark = element('span', 'empty-icon');
     mark.append(icon(view === 'completed' ? 'check' : 'leaf'));
     empty.append(mark);
-    let heading = '空白，也是一种刚刚好。';
-    let text = '想到什么再写下。现在，先好好生活。';
+    let heading = "A little space feels just right.";
+    let text = "Add something when it comes to mind. For now, just live.";
     if (view === 'completed') {
-      heading = '不着急，按自己的节奏。';
-      text = '做完的小事，会在这里留下一个小小的肯定。';
+      heading = "No rush. Find your own rhythm.";
+      text = "The things you finish will find a little home here.";
     } else if (filter !== 'all') {
-      heading = '此刻，没有这样的待办。';
-      text = '换个状态看看，或给自己留一点空白。';
+      heading = "Nothing at this stage right now.";
+      text = "Try another filter, or enjoy a little space.";
     } else if (demo && demoHours >= 70) {
-      heading = '这件事其实没那么重要';
-      text = '三天过去了。清单空了，你也可以轻一点。';
+      heading = "Maybe it wasn’t that important.";
+      text = "Three days have passed. The list is clear. Breathe a little easier.";
       empty.classList.add('empty-farewell');
     }
-    empty.append(element('h3', '', t(heading)), element('p', '', t(text)));
+    empty.append(element('h3', '', formatText(heading)), element('p', '', formatText(text)));
     if (view === 'active') {
-      const action = element('button', '', t(filter !== 'all' ? '看看全部小事 →' : demo ? '写下我的第一件小事 →' : '＋ 写一件小事'));
+      const action = element('button', '', formatText(filter !== 'all' ? "See all the little things →" : demo ? "Add my first little thing →" : "＋ Add a little thing"));
       action.addEventListener('click', () => {
         if (filter !== 'all') { filter = 'all'; render(); }
         else { if (demo) exitDemo(); $('task-input').focus(); }
@@ -257,14 +255,14 @@
     $('stat-completed').textContent = String(data.stats.completed);
     $('stat-released').textContent = String(data.stats.released);
     $('demo-banner').hidden = !demo;
-    $('exit-demo').textContent = t(started ? '返回我的清单 ↗' : '开始我的清单 ↗');
+    $('exit-demo').textContent = formatText(started ? "Back to my list ↗" : "Start my list ↗");
     $('demo-controls').hidden = !demo;
     $('enter-demo').hidden = demo;
-    $('demo-description').textContent = t(demo ? '拖动时间，看小事慢慢变轻。' : '不用等三天，看看待办怎样轻轻消失。');
-    $('time-output').textContent = t('{hours} 小时', { hours: demoHours });
-    $('time-slider').setAttribute('aria-valuetext', t('{hours} 小时', { hours: demoHours }));
+    $('demo-description').textContent = formatText(demo ? "Move time forward. Watch things get lighter." : "No need to wait three days. See a task fade away.");
+    $('time-output').textContent = formatText("{hours}h", { hours: demoHours });
+    $('time-slider').setAttribute('aria-valuetext', formatText("{hours}h", { hours: demoHours }));
     $('time-slider').style.setProperty('--slider-progress', `${demoHours / 72 * 100}%`);
-    $('list-time-note').textContent = t(demo ? '示例清单 · 可放心体验' : '每件事 · 3 天');
+    $('list-time-note').textContent = formatText(demo ? "A sample · yours stays safe" : "Each task · 3 days");
     for (const button of document.querySelectorAll('[data-view]')) {
       const selected = button.dataset.view === view;
       button.classList.toggle('selected', selected);
@@ -273,9 +271,9 @@
     $('filter-button').hidden = view === 'completed';
     if (view === 'completed') $('filter-options').hidden = true;
     $('filter-button').setAttribute('aria-expanded', String(!$('filter-options').hidden));
-    const filterLabel = t(filter === 'all' ? '全部状态' : stageNames[filter]);
+    const filterLabel = formatText(filter === 'all' ? "All stages" : stageNames[filter]);
     $('filter-button').replaceChildren(document.createTextNode(`${filterLabel} `), element('span', '', '⌄'));
-    $('filter-button').setAttribute('aria-label', t('筛选时间状态：{stage}', { stage: filterLabel }));
+    $('filter-button').setAttribute('aria-label', formatText("Filter by age: {stage}", { stage: filterLabel }));
     for (const button of document.querySelectorAll('[data-filter]')) button.setAttribute('aria-pressed', String(button.dataset.filter === filter));
     const tasks = view === 'completed' ? completed : active.filter(task => filter === 'all' || E.getTaskLife(task, now).stage === filter);
     const focused = document.activeElement;
@@ -299,12 +297,12 @@
     if (next === data) { tick(); return; }
     updateState(next, origin => E.completeTask(origin, task.id, currentTime()));
     restoreFocus(index);
-    showToast('又做好了一件小事。今天的你，很好。', () => {
+    showToast("One little thing done. You’re doing just fine.", () => {
       if (context !== demo) return;
       const before = currentState();
       const restored = E.undoCompletion(before, task.id, currentTime());
       updateState(restored, origin => E.undoCompletion(origin, task.id, currentTime()));
-      showToast(restored === before ? '三天已经过去，就让它留在已完成里吧。' : '放回清单了。按自己的节奏来。');
+      showToast(restored === before ? "Three days have passed. Let it stay in Done." : "Back on your list. Take it at your own pace.");
     }, 'check');
   }
   function letGo(task) {
@@ -312,31 +310,19 @@
     const index = [...$('task-list').children].findIndex(el => el.dataset.id === task.id);
     updateState(E.releaseTask(currentState(), task.id, currentTime()), origin => E.releaseTask(origin, task.id, currentTime()));
     restoreFocus(index);
-    showToast('这件事其实没那么重要。放下，也很好。', () => {
+    showToast("Maybe it wasn’t that important. Letting go is okay.", () => {
       if (context !== demo) return;
       const before = currentState();
       const restored = E.restoreReleasedTask(before, task, currentTime());
       updateState(restored, origin => E.restoreReleasedTask(origin, task, currentTime()));
-      showToast(restored === before ? '三天已经过去，就让它轻轻离开吧。' : '放回清单了，仍是最初的三天。');
+      showToast(restored === before ? "Three days have passed. Let it drift away." : "Back on your list, with its original three days.");
     }, 'wind');
-  }
-
-  function changeLanguage(language, persist = true) {
-    I.setLanguage(language, persist);
-    I.apply();
-    storageStatus();
-    render();
-    if (!$('toast').hidden) $('toast-text').textContent = t(toastMessage);
-    if ($('task-input').validity.customError) $('task-input').setCustomValidity(t('写下一件小事，再放进来吧。'));
-  }
-  for (const button of document.querySelectorAll('[data-language]')) {
-    button.addEventListener('click', () => changeLanguage(button.dataset.language));
   }
 
   $('task-form').addEventListener('submit', event => {
     event.preventDefault();
     const text = $('task-input').value.trim();
-    if (!text) { $('task-input').setCustomValidity(t('写下一件小事，再放进来吧。')); $('task-input').reportValidity(); return; }
+    if (!text) { $('task-input').setCustomValidity(formatText("Write a little thing before adding it.")); $('task-input').reportValidity(); return; }
     if (demo) exitDemo();
     finishExpiration(false);
     started = true;
@@ -346,12 +332,12 @@
       updateState(E.addTask(state, text, Date.now()));
       $('task-input').value = '';
       $('task-input').focus();
-      showToast(storageAvailable ? '放进来了。给它三天，也给自己一点余地。' : '已放进清单，但浏览器暂时无法保存。');
+      showToast(storageAvailable ? "Added. Give it three days, and give yourself a little room." : "Added, but this browser is unable to save your list.");
     } catch (error) { showToast(error.message); }
   });
   $('task-input').addEventListener('input', () => $('task-input').setCustomValidity(''));
   $('task-input').addEventListener('invalid', () => {
-    if ($('task-input').validity.valueMissing) $('task-input').setCustomValidity(t('写下一件小事，再放进来吧。'));
+    if ($('task-input').validity.valueMissing) $('task-input').setCustomValidity(formatText("Write a little thing before adding it."));
   });
   $('exit-demo').addEventListener('click', () => { exitDemo(); $('task-input').focus(); });
   $('enter-demo').addEventListener('click', enterDemo);
@@ -362,7 +348,7 @@
     demoHours = Number(event.target.value);
     demoState = E.sweepExpired(demoOrigin, currentTime()).state;
     render();
-    if (demoState.stats.released > previousCount) showToast('这件事其实没那么重要。它已经随风离开。', null, 'wind');
+    if (demoState.stats.released > previousCount) showToast("Maybe it wasn’t that important. It has drifted away.", null, 'wind');
   });
   for (const button of document.querySelectorAll('[data-view]')) button.addEventListener('click', () => { view = button.dataset.view; render(); });
   for (const button of document.querySelectorAll('[data-filter]')) button.addEventListener('click', () => { filter = button.dataset.filter; render(); });
@@ -390,8 +376,6 @@
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { finishExpiration(true); if (!demo) render(); } });
   window.addEventListener('focus', () => { finishExpiration(true); if (!demo) render(); });
   window.addEventListener('storage', event => {
-    if (event.key === I.KEY) { changeLanguage(event.newValue, false); return; }
-    if (event.key === null) changeLanguage(I.readLanguage(), false);
     if (event.key !== KEY && event.key !== null) return;
     dismissToast();
     state = E.createState();
@@ -400,7 +384,6 @@
     finishExpiration(true);
     if (!demo) render();
   });
-  I.apply();
   load();
   if (started) { finishExpiration(true); render(); }
   else enterDemo();
