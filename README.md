@@ -56,3 +56,10 @@ npm run test:desktop
 Tests cover the 72-hour boundary, offline expiration, completed records, undo deadlines, storage validation, immutable state transitions, safe text interpolation, and desktop asset/navigation boundaries.
 
 The desktop smoke check launches hidden app windows with a disposable profile, then reopens the app in a new process to verify saved tasks and offline expiration. It never reads or changes your real desktop profile.
+
+## License
+
+Three Days is licensed under the [MIT License](LICENSE).
+Copyright (c) 2026 yeze5421.
+
+Third-party dependencies and the bundled Electron runtime retain their own licenses and notices.

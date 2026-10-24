@@ -21,7 +21,7 @@
   },
   "productName": "Three Days",
   "main": "desktop/main.cjs",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "build": {
     "appId": "local.threedays.todo",
     "productName": "Three Days",
@@ -38,6 +38,7 @@
       "favicon.svg",
       "desktop/**/*.cjs",
       "build/icon.ico",
+      "LICENSE",
       "package.json"
     ],
     "asar": true,
