@@ -1,13 +1,22 @@
 @echo off
 setlocal
 cd /d "%~dp0"
+if exist "dist\Three Days.exe" (
+  start "" "%~dp0dist\Three Days.exe"
+  exit /b 0
+)
 where node >nul 2>nul
 if errorlevel 1 (
-  echo Node.js 18 or newer is required. Please install Node.js and try again.
+  echo Open the packaged Three Days.exe to use the app without Node.js.
+  echo Developers: install Node.js 22.14 or newer, then run npm install.
   pause
   exit /b 1
 )
-start "" "http://localhost:4173"
-node server.cjs
+if not exist "node_modules\.bin\electron.cmd" (
+  echo Run npm install in this folder first, then try again.
+  pause
+  exit /b 1
+)
+call npm start
 pause
 endlocal

@@ -42,7 +42,7 @@
   function currentTime() { return demo ? demoAnchor + demoHours * E.HOUR : Date.now(); }
   function storageStatus() {
     $('storage-status').textContent = formatText(storageAvailable
-      ? "Saved only in this browser. Your thoughts stay yours."
+      ? "Saved only on this device. Your thoughts stay yours."
       : "Storage is unavailable. This list will last only for this session.");
   }
   function persist() {
@@ -332,7 +332,7 @@
       updateState(E.addTask(state, text, Date.now()));
       $('task-input').value = '';
       $('task-input').focus();
-      showToast(storageAvailable ? "Added. Give it three days, and give yourself a little room." : "Added, but this browser is unable to save your list.");
+      showToast(storageAvailable ? "Added. Give it three days, and give yourself a little room." : "Added, but your list could not be saved on this device.");
     } catch (error) { showToast(error.message); }
   });
   $('task-input').addEventListener('input', () => $('task-input').setCustomValidity(''));
