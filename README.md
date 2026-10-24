@@ -1,10 +1,26 @@
 # Three Days
 
-A gentle, offline Windows desktop to-do list. Every task lives for three days, fades with time, and disappears after 72 hours with a simple thought: **Maybe it wasn't that important.**
+**A to-do list that lets go after 3 days.**
 
-## Open the desktop app
+Unfinished tasks gently fade and disappear after 72 hours, with a simple thought: **Maybe it wasn't that important.** Completed tasks stay in Done.
 
-Double-click `dist/Three Days.exe`, or use `start.cmd` from the project folder after building it. The portable app includes its runtime: no browser, local web server, Node.js installation, account, or internet connection is needed to use it.
+**[Download for Windows (x64)](https://github.com/yeze5421/sanri-todo/releases/latest/download/Three-Days-Windows-x64.exe)** · [All releases](https://github.com/yeze5421/sanri-todo/releases)
+
+Portable desktop app. Fully offline. No account. Your list stays on your device.
+
+![Three Days demo: sample tasks fade as time advances, then disappear with a gentle reminder.](docs/three-days-demo.gif)
+
+*A short, accelerated preview using the built-in sample list. Real tasks always get 72 hours.*
+
+## Download and open
+
+1. [Download Three Days for Windows (x64)](https://github.com/yeze5421/sanri-todo/releases/latest/download/Three-Days-Windows-x64.exe).
+2. Save `Three-Days-Windows-x64.exe` anywhere you like and double-click it.
+3. Choose **Start my list** to begin, or try the sample list first.
+
+The portable app includes its runtime: no installation, browser, local web server, Node.js installation, account, or internet connection is needed to use it. A SHA-256 checksum file is available alongside the download.
+
+To update, close the app and replace the executable with the latest download. Your list stays in the local data folder described below.
 
 The app runs in its own window. Closing the window quits the app; opening it again restores your list and clears tasks whose original 72 hours have passed. Launching it twice focuses the existing window.
 
